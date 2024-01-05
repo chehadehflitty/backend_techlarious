@@ -1,0 +1,4 @@
+Only one application can be used on the same ip/port we can not use two different application on the same port we should give each app a specific
+port otherwise we will see an error.
+
+the default ports used are 3000 4000 5000 8000 8080 9000 and that depends on the application. we have also 3001 5001 8081 

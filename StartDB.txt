@@ -1,0 +1,50 @@
+cd the file
+npm init
+enter enter for the description git repo...
+yes enter
+code .
+--------------------------this all in the cmd first
+
+make folders(controllers, models, routers, utils)
+make files(databse.js, .env, index.js)
+
+insides the terminale: 
+npm i express
+npm i mongoose
+npm i dotenv
+npm i nodemon --save-dev
+and inside package.json:
+we go to sripts and put this: "start": "nodemon index.js"
+
+inside the .env:
+we make MongoDB_URI and copy the pass
+
+inside database.js:
+const mongoose = require("mongoose");
+require("dotenv").config();
+
+exports.connectDB = async () =>{
+  try{
+    await mongoose.connect(process.env.MongoDB_URI);
+    console.log("MongoDB Connected !!");
+  }catch(err){
+    console.error(err);
+    process.exit(1);
+  }
+
+}
+
+inside index.js:
+const express = require('express');
+const app = express();
+const DB = require("./database").connectDB;
+
+DB();
+
+app.use(express.json())
+
+app.listen(3000,()=>{
+  console.log("Server is running on port 3000");
+});
+
+and finally we write in the terminal npm start should give server is running on port 3000 and mongodb connnected
