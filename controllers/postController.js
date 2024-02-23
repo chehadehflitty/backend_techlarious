@@ -63,3 +63,26 @@ exports.deletePost = async (req,res) =>{
       res.status(500).json({message: err.message});
     }
   };
+
+exports.fetchTimeLinePosts = async(req,res) => {
+  try{
+    const currentUser =await User.findById(req.body["currentUserID"]);
+    if(!currentUser) return res.status(401).json({message: "login to continue"});
+
+    const currentUserPosts = await Post.find({postOwner: req.body["currentUserID"],  
+    });
+    const friendsPosts = await Promise.all(
+      currentUser.friends.map((friendID)=>{
+        return Post.find({postOwner: friendID})
+      })
+    );
+    const timeLinePosts=currentUserPosts.concat(...friendsPosts);
+
+    return timeLinePosts.length <=0
+    ? res.status(404).json({message:"there is no posts to display"})
+    : res.status(200).json(timeLinePosts)
+  }catch(err){
+    console.log(err);
+    res.status(500).json({message: err.message});
+  }
+}  
