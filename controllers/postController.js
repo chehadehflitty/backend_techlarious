@@ -42,4 +42,24 @@ exports.deletePost = async (req,res) =>{
     console.log(err);
     res.status(500).json({message: err.message});
    }
-  }
+  };
+
+  exports.like = async(req,res) => {
+    try{
+      // fb.com/chehadeh/..
+      const post = await Post.findById(req.params["postID"]);
+      if(!post) return res.status(401).json({message:"login to like"});
+
+      if(!post.likes.includes(req.body["userID"])){
+        await post.updateOne({$push:{likes: req.body["userID"]}});
+        return res.status(200).json({message:"post has been liked"})
+      }
+      else{
+        await post.updateOne({$pull:{likes: req.body["userID"]}});
+        return res.status(200).json({message:"post has been disliked"})
+      }
+    }catch(err){
+      console.log(err);
+      res.status(500).json({message: err.message});
+    }
+  };
